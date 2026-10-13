@@ -1,0 +1,614 @@
+[
+  {
+    "domain": "Networking",
+    "scenario": "Una aplicación en una subnet privada debe descargar parches desde Internet sin aceptar conexiones entrantes y acceder a Object Storage por una ruta privada. ¿Qué diseño cumple ambos requisitos?",
+    "options": [
+      "Internet Gateway para ambos destinos",
+      "NAT Gateway para Internet y Service Gateway para Object Storage",
+      "Service Gateway para todos los destinos",
+      "DRG y VPN para ambos destinos"
+    ],
+    "correct": 1,
+    "why": [
+      "Internet Gateway no proporciona por sí solo salida segura desde una subnet privada.",
+      "NAT permite salida a Internet sin IP pública; Service Gateway permite acceso privado a servicios Oracle compatibles.",
+      "Service Gateway no permite acceder a Internet general.",
+      "DRG y VPN son para conectividad privada entre redes, no sustituyen estas dos rutas."
+    ]
+  },
+  {
+    "domain": "Networking",
+    "scenario": "Dos VCN en regiones diferentes necesitan comunicarse usando la red privada de Oracle, sin exponer instancias a Internet. ¿Qué arquitectura es apropiada?",
+    "options": [
+      "Local Peering Gateway entre regiones",
+      "Remote Peering Connection mediante DRG en ambas regiones",
+      "Dos Internet Gateways con IP públicas",
+      "NAT Gateway en cada VCN"
+    ],
+    "correct": 1,
+    "why": [
+      "LPG conecta VCN dentro de la misma región.",
+      "RPC asociado a DRG permite peering privado entre regiones, sujeto a rutas y políticas.",
+      "Las IP públicas contradicen el requisito.",
+      "NAT proporciona salida a Internet, no peering entre VCN."
+    ]
+  },
+  {
+    "domain": "Networking",
+    "scenario": "Una empresa quiere conectar su centro de datos con OCI mediante conectividad privada dedicada y latencia más predecible que Internet. ¿Qué servicio priorizar?",
+    "options": [
+      "Site-to-Site VPN únicamente",
+      "FastConnect",
+      "Service Gateway",
+      "Internet Gateway"
+    ],
+    "correct": 1,
+    "why": [
+      "VPN usa túneles cifrados sobre Internet y puede servir como respaldo.",
+      "FastConnect proporciona conexión privada dedicada mediante un proveedor o colocation.",
+      "Service Gateway conecta VCN con servicios Oracle compatibles.",
+      "Internet Gateway no ofrece conexión dedicada privada."
+    ]
+  },
+  {
+    "domain": "Networking",
+    "scenario": "Una aplicación necesita inspección y terminación TLS HTTP, reglas por URL y distribución a varios servidores. ¿Qué balanceador encaja mejor?",
+    "options": [
+      "Network Load Balancer",
+      "Load Balancer flexible de capa 7",
+      "NAT Gateway",
+      "DNS privado únicamente"
+    ],
+    "correct": 1,
+    "why": [
+      "NLB opera principalmente en capa 3/4 y no ofrece el mismo enrutamiento HTTP por URL.",
+      "Load Balancer admite TLS y políticas HTTP de capa 7.",
+      "NAT Gateway no distribuye tráfico entrante.",
+      "DNS no sustituye balanceo ni políticas HTTP."
+    ]
+  },
+  {
+    "domain": "Networking",
+    "scenario": "Un servicio TCP requiere preservar la IP de origen y un balanceo de baja latencia sin inspección HTTP. ¿Qué elegir?",
+    "options": [
+      "Load Balancer de capa 7 con reglas HTTP",
+      "Network Load Balancer",
+      "Web Application Firewall como balanceador único",
+      "API Gateway"
+    ],
+    "correct": 1,
+    "why": [
+      "Capa 7 añade funciones HTTP innecesarias para este caso.",
+      "Network Load Balancer resulta adecuado para TCP/UDP y preservación de origen según configuración.",
+      "WAF protege aplicaciones web; no sustituye un balanceador TCP general.",
+      "API Gateway está orientado a APIs, no a balanceo TCP arbitrario."
+    ]
+  },
+  {
+    "domain": "Networking",
+    "scenario": "Una instancia no tiene IP pública. Debe permitir únicamente HTTPS entrante desde el Load Balancer y SSH desde una subnet de administración. ¿Qué control conviene usar?",
+    "options": [
+      "Reglas amplias 0.0.0.0/0 en Security List",
+      "NSG con reglas específicas para ambos orígenes",
+      "NAT Gateway con puerto 22 abierto",
+      "Desactivar firewall del sistema"
+    ],
+    "correct": 1,
+    "why": [
+      "Reglas abiertas amplían innecesariamente la superficie de ataque.",
+      "NSG permite controlar tráfico por grupos de recursos y origen/puerto.",
+      "NAT Gateway no habilita conexiones entrantes arbitrarias.",
+      "Desactivar el firewall reduce seguridad."
+    ]
+  },
+  {
+    "domain": "IAM",
+    "scenario": "Un proceso en una instancia Compute debe leer secretos de Vault sin almacenar credenciales de usuario en el servidor. ¿Qué diseño elegir?",
+    "options": [
+      "Guardar API Key de administrador en disco",
+      "Dynamic Group e IAM Policy para Instance Principals",
+      "Crear usuario compartido con contraseña fija",
+      "Habilitar acceso anónimo a Vault"
+    ],
+    "correct": 1,
+    "why": [
+      "Claves administrativas persistentes elevan el riesgo.",
+      "Instance Principals usa identidad de recurso; Dynamic Group y Policy conceden permisos mínimos.",
+      "Usuarios compartidos y contraseñas fijas no son ideales.",
+      "Vault no debe exponerse de forma anónima."
+    ]
+  },
+  {
+    "domain": "IAM",
+    "scenario": "Un equipo de soporte debe visualizar recursos en un compartment, pero no modificarlos. ¿Qué permiso se ajusta mejor?",
+    "options": [
+      "manage all-resources",
+      "inspect all-resources",
+      "read all-resources",
+      "use all-resources"
+    ],
+    "correct": 2,
+    "why": [
+      "manage permite acciones de administración excesivas.",
+      "inspect suele mostrar metadatos/listados limitados, menos que read.",
+      "read habilita lectura sin privilegios de modificación, según tipo de recurso.",
+      "use puede permitir operaciones que cambian recursos."
+    ]
+  },
+  {
+    "domain": "IAM",
+    "scenario": "Una compañía separa desarrollo y producción. Los desarrolladores deben administrar Compute solo en desarrollo. ¿Qué enfoque minimiza privilegios?",
+    "options": [
+      "Política manage all-resources in tenancy",
+      "Compartment de desarrollo y política restringida al grupo y recurso",
+      "Crear un único usuario root para todo el equipo",
+      "Dar permisos de administrador global"
+    ],
+    "correct": 1,
+    "why": [
+      "Otorga alcance demasiado amplio.",
+      "Compartments y políticas acotan permisos por equipo y entorno.",
+      "Compartir cuentas impide trazabilidad.",
+      "Administrador global contradice mínimo privilegio."
+    ]
+  },
+  {
+    "domain": "IAM",
+    "scenario": "Una aplicación desplegada en OKE necesita acceder a Object Storage sin credenciales persistentes. ¿Qué mecanismo OCI es más adecuado?",
+    "options": [
+      "Incluir claves de API en la imagen",
+      "Workload Identity para OKE con políticas IAM",
+      "Usar una contraseña de usuario compartido",
+      "Hacer público el bucket"
+    ],
+    "correct": 1,
+    "why": [
+      "Incrustar claves aumenta riesgo de exposición.",
+      "Workload Identity permite identidad de cargas de OKE y permisos específicos.",
+      "Contraseñas compartidas no son apropiadas.",
+      "Hacer público el bucket no cumple seguridad."
+    ]
+  },
+  {
+    "domain": "Security",
+    "scenario": "Una empresa quiere detectar configuraciones inseguras en tenancy y responder automáticamente a ciertos hallazgos. ¿Qué servicio?",
+    "options": [
+      "Cloud Guard con detector y responder recipes",
+      "Object Storage Lifecycle Policies",
+      "DNS Traffic Management",
+      "FastConnect"
+    ],
+    "correct": 0,
+    "why": [
+      "Cloud Guard detecta problemas de seguridad y puede ejecutar respuestas configuradas.",
+      "Lifecycle gestiona objetos, no postura de seguridad.",
+      "DNS Traffic Management dirige respuestas DNS.",
+      "FastConnect es conectividad."
+    ]
+  },
+  {
+    "domain": "Security",
+    "scenario": "Una aplicación web pública debe bloquear patrones como SQL injection y ataques HTTP maliciosos antes de llegar al balanceador. ¿Qué servicio añadir?",
+    "options": [
+      "NAT Gateway",
+      "Web Application Firewall (WAF)",
+      "Service Gateway",
+      "File Storage"
+    ],
+    "correct": 1,
+    "why": [
+      "NAT no inspecciona peticiones web entrantes.",
+      "WAF aplica protecciones de capa 7 a tráfico HTTP(S).",
+      "Service Gateway no es defensa web pública.",
+      "File Storage es almacenamiento."
+    ]
+  },
+  {
+    "domain": "Security",
+    "scenario": "La política corporativa exige que las claves de cifrado sean gestionadas por la empresa y auditables, con rotación controlada. ¿Qué utilizar?",
+    "options": [
+      "OCI Vault con customer-managed keys",
+      "Una clave incrustada en el código",
+      "Solo Security Lists",
+      "DNSSEC"
+    ],
+    "correct": 0,
+    "why": [
+      "Vault centraliza gestión de claves, políticas y auditoría.",
+      "Las claves en código son difíciles de proteger y rotar.",
+      "Security Lists filtran tráfico, no gestionan claves.",
+      "DNSSEC protege autenticidad DNS, no claves de datos."
+    ]
+  },
+  {
+    "domain": "Security",
+    "scenario": "Se requiere identificar qué principal cambió una regla de seguridad y cuándo ocurrió. ¿Qué fuente consultar primero?",
+    "options": [
+      "OCI Audit",
+      "Object Storage Auto-Tiering",
+      "Load Balancer health checks",
+      "NAT Gateway metrics"
+    ],
+    "correct": 0,
+    "why": [
+      "Audit registra llamadas a API y acciones de control para investigación.",
+      "Auto-Tiering gestiona clase de almacenamiento.",
+      "Health checks monitorean backends.",
+      "Métricas NAT no identifican cambios de configuración."
+    ]
+  },
+  {
+    "domain": "Compute",
+    "scenario": "Una aplicación recibe picos de tráfico variables. Se necesita aumentar y reducir instancias automáticamente para evitar pagar capacidad ociosa. ¿Qué diseño?",
+    "options": [
+      "Una VM muy grande permanente",
+      "Instance Pool con Autoscaling basado en métricas y Load Balancer",
+      "Backups cada hora",
+      "Más reglas de Security List"
+    ],
+    "correct": 1,
+    "why": [
+      "Sobredimensionar permanentemente encarece operación.",
+      "Autoscaling ajusta número de instancias y Load Balancer reparte solicitudes.",
+      "Backups no escalan rendimiento.",
+      "Reglas de red no aumentan capacidad."
+    ]
+  },
+  {
+    "domain": "Compute",
+    "scenario": "Un trabajo batch tolera interrupciones y busca reducir al máximo el costo de Compute. ¿Qué capacidad considerar?",
+    "options": [
+      "Preemptible Instances",
+      "Dedicated VM Hosts siempre",
+      "Bare Metal obligatorio",
+      "Instancias de producción críticas sin redundancia"
+    ],
+    "correct": 0,
+    "why": [
+      "Preemptible Instances suelen costar menos pero pueden ser reclamadas, adecuadas para cargas tolerantes.",
+      "Hosts dedicados priorizan aislamiento y control, no costo mínimo.",
+      "Bare Metal no es requisito de batch.",
+      "Sin redundancia no es una estrategia de ahorro segura para producción crítica."
+    ]
+  },
+  {
+    "domain": "Compute",
+    "scenario": "Una aplicación requiere ajustar CPU y memoria sin migrar a una shape fija mayor cuando cambian las necesidades. ¿Qué capacidad buscar?",
+    "options": [
+      "Flexible Shapes",
+      "NAT Gateway",
+      "WAF",
+      "DNS Resolver"
+    ],
+    "correct": 0,
+    "why": [
+      "Flexible Shapes permiten configurar OCPU y memoria dentro de límites compatibles.",
+      "NAT resuelve conectividad.",
+      "WAF resuelve protección web.",
+      "DNS Resolver resuelve nombres."
+    ]
+  },
+  {
+    "domain": "Storage",
+    "scenario": "Varios servidores Linux deben compartir simultáneamente un sistema de archivos POSIX administrado. ¿Qué servicio elegir?",
+    "options": [
+      "Block Volume adjunto de forma convencional a cada VM",
+      "File Storage",
+      "Object Storage Standard montado como disco POSIX nativo",
+      "Archive Storage"
+    ],
+    "correct": 1,
+    "why": [
+      "Block Volume no ofrece por defecto filesystem compartido multiinstancia.",
+      "File Storage proporciona almacenamiento NFS compartido.",
+      "Object Storage es almacenamiento de objetos, no filesystem POSIX nativo.",
+      "Archive está optimizado para retención fría."
+    ]
+  },
+  {
+    "domain": "Storage",
+    "scenario": "Una base de datos en Compute requiere almacenamiento de bloque persistente con rendimiento ajustable y copias de seguridad. ¿Qué servicio?",
+    "options": [
+      "Object Storage Archive",
+      "Block Volume",
+      "DNS",
+      "WAF"
+    ],
+    "correct": 1,
+    "why": [
+      "Archive no es disco de base de datos.",
+      "Block Volume ofrece volúmenes persistentes y políticas de backup.",
+      "DNS no almacena datos.",
+      "WAF no almacena datos."
+    ]
+  },
+  {
+    "domain": "Storage",
+    "scenario": "Una empresa almacena logs durante años, casi nunca los consulta y puede tolerar tiempo de restauración. Quiere minimizar costos. ¿Qué clase?",
+    "options": [
+      "Object Storage Standard",
+      "Object Storage Archive",
+      "File Storage de alto rendimiento",
+      "Block Volume Ultra High Performance"
+    ],
+    "correct": 1,
+    "why": [
+      "Standard es para acceso frecuente y suele costar más.",
+      "Archive reduce costo para datos fríos, con recuperación no inmediata.",
+      "File Storage no es opción de archivo más económica.",
+      "Block Volume UHP prioriza IOPS, no archivo barato."
+    ]
+  },
+  {
+    "domain": "Storage",
+    "scenario": "Una aplicación necesita que archivos nuevos sean accesibles inmediatamente y después pasar automáticamente a una clase más económica según reglas de antigüedad. ¿Qué configurar?",
+    "options": [
+      "Lifecycle Policy en Object Storage",
+      "Internet Gateway",
+      "NSG",
+      "FastConnect"
+    ],
+    "correct": 0,
+    "why": [
+      "Lifecycle Policy automatiza transiciones de clase según reglas compatibles.",
+      "Gateway no gestiona retención.",
+      "NSG controla red.",
+      "FastConnect conecta redes."
+    ]
+  },
+  {
+    "domain": "Availability",
+    "scenario": "La región dispone de múltiples Fault Domains. Una aplicación de dos nodos debe sobrevivir a mantenimiento o falla de infraestructura física localizada. ¿Qué diseño?",
+    "options": [
+      "Ambos nodos en el mismo Fault Domain",
+      "Distribuir nodos entre Fault Domains y usar Load Balancer",
+      "Una sola VM con más OCPU",
+      "Solo snapshots manuales"
+    ],
+    "correct": 1,
+    "why": [
+      "Mismo Fault Domain concentra riesgo.",
+      "Fault Domains reducen falla correlacionada dentro de un AD y el balanceador permite conmutación.",
+      "Una VM sigue siendo punto único de falla.",
+      "Snapshots no proporcionan disponibilidad inmediata."
+    ]
+  },
+  {
+    "domain": "Availability",
+    "scenario": "Una empresa exige continuidad de servicio incluso si falla una región completa. ¿Qué estrategia corresponde?",
+    "options": [
+      "Dos Fault Domains en una sola región",
+      "Arquitectura multirregión con replicación y plan de failover",
+      "Solo aumentar OCPU",
+      "Agregar NAT Gateway"
+    ],
+    "correct": 1,
+    "why": [
+      "Fault Domains no protegen contra pérdida regional.",
+      "Multirregión con replicación y conmutación responde al riesgo regional.",
+      "CPU no aborda desastre regional.",
+      "NAT no es DR."
+    ]
+  },
+  {
+    "domain": "Recovery",
+    "scenario": "El negocio exige pérdida máxima de datos de 15 minutos y recuperación en menos de una hora. ¿Qué métricas representan estas restricciones?",
+    "options": [
+      "RTO=15 minutos; RPO=1 hora",
+      "RPO=15 minutos; RTO=1 hora",
+      "Ambas son RTO",
+      "Ambas son RPO"
+    ],
+    "correct": 1,
+    "why": [
+      "Invierte los objetivos.",
+      "RPO mide pérdida máxima tolerable de datos; RTO tiempo máximo de restauración.",
+      "No: son métricas distintas.",
+      "No: son métricas distintas."
+    ]
+  },
+  {
+    "domain": "Recovery",
+    "scenario": "Se requiere orquestar el failover y failback de una pila de aplicaciones entre entornos OCI con planes repetibles. ¿Qué servicio considerar?",
+    "options": [
+      "Full Stack Disaster Recovery",
+      "NAT Gateway",
+      "Web Application Firewall",
+      "Object Storage Auto-Tiering"
+    ],
+    "correct": 0,
+    "why": [
+      "Full Stack DR ayuda a orquestar planes de recuperación y transiciones de aplicaciones.",
+      "NAT no orquesta recuperación.",
+      "WAF protege HTTP.",
+      "Auto-Tiering optimiza clase de almacenamiento."
+    ]
+  },
+  {
+    "domain": "Recovery",
+    "scenario": "Una aplicación necesita restaurar un volumen después de un borrado accidental de datos, sin necesidad de mantener un segundo sitio activo. ¿Qué priorizar?",
+    "options": [
+      "Block Volume backups con política y pruebas de restauración",
+      "Remote Peering Connection únicamente",
+      "WAF",
+      "Aumentar OCPU"
+    ],
+    "correct": 0,
+    "why": [
+      "Backups permiten recuperar estados previos; verificar restauraciones es esencial.",
+      "Peering no recupera datos borrados.",
+      "WAF no restaura volúmenes.",
+      "CPU no restaura datos."
+    ]
+  },
+  {
+    "domain": "Cost",
+    "scenario": "Una empresa necesita conocer qué proyecto consume más presupuesto en una tenancy compartida. ¿Qué combinación es adecuada?",
+    "options": [
+      "Cost Analysis y Cost-Tracking Tags",
+      "NAT Gateway y DRG",
+      "WAF y Vault",
+      "Security Lists y NSG"
+    ],
+    "correct": 0,
+    "why": [
+      "Etiquetas de seguimiento de costos y Cost Analysis permiten atribuir consumo.",
+      "Son servicios de red.",
+      "Son controles de seguridad.",
+      "Son controles de red."
+    ]
+  },
+  {
+    "domain": "Cost",
+    "scenario": "Una carga tiene consumo estable de Compute durante largo plazo y la empresa quiere mejorar previsibilidad y costos. ¿Qué analizar primero?",
+    "options": [
+      "Compromisos de consumo y opciones de pricing aplicables al contrato",
+      "Comprar siempre más OCPU",
+      "Mantener todas las VMs encendidas sin revisar",
+      "Usar Archive Storage para ejecutar VMs"
+    ],
+    "correct": 0,
+    "why": [
+      "Revisar compromisos, descuentos y contrato puede optimizar gasto; comparar con uso real.",
+      "Más OCPU puede aumentar costos.",
+      "La capacidad ociosa genera gasto innecesario.",
+      "Archive no ejecuta instancias."
+    ]
+  },
+  {
+    "domain": "Database",
+    "scenario": "Una empresa quiere una base de datos Oracle administrada con automatización de parches, backups y escalado, reduciendo administración operativa. ¿Qué evaluar?",
+    "options": [
+      "Autonomous Database",
+      "Instalar Oracle manualmente en una VM sin automatización",
+      "Object Storage como motor SQL",
+      "DNS privado"
+    ],
+    "correct": 0,
+    "why": [
+      "Autonomous Database automatiza múltiples tareas operativas de base de datos.",
+      "La VM manual aumenta trabajo de administración.",
+      "Object Storage no sustituye un motor relacional.",
+      "DNS no es una base de datos."
+    ]
+  },
+  {
+    "domain": "Database",
+    "scenario": "Una aplicación necesita reducir latencia de lecturas repetitivas sin escalar inmediatamente la base de datos principal. ¿Qué patrón evaluar?",
+    "options": [
+      "Capa de caché apropiada y medición de hit rate",
+      "Crear más Security Lists",
+      "NAT Gateway",
+      "Archive Storage"
+    ],
+    "correct": 0,
+    "why": [
+      "Una caché para datos adecuados reduce consultas repetidas; debe gestionar consistencia e invalidación.",
+      "Security Lists no mejoran consultas.",
+      "NAT no acelera lecturas DB internas.",
+      "Archive aumenta latencia de recuperación."
+    ]
+  },
+  {
+    "domain": "Architecture",
+    "scenario": "Una empresa solicita una aplicación pública altamente disponible, protegida contra ataques HTTP, con backends privados y capacidad de crecimiento. ¿Qué conjunto encaja?",
+    "options": [
+      "WAF + Load Balancer público + backends privados en Instance Pool con Autoscaling",
+      "Solo Internet Gateway + una VM pública",
+      "NAT Gateway + una VM privada sin frontend",
+      "Solo Object Storage"
+    ],
+    "correct": 0,
+    "why": [
+      "Combina protección web, balanceo, aislamiento y escalado; agregar distribución entre dominios según región.",
+      "Una VM es punto único y expuesta.",
+      "NAT no permite servir tráfico entrante como frontend.",
+      "Object Storage no ejecuta el backend de la aplicación."
+    ]
+  },
+  {
+    "domain": "Architecture",
+    "scenario": "Un sistema interno no debe exponerse a Internet. Los usuarios de la oficina acceden mediante conexión privada y el sistema usa servicios Oracle privados. ¿Qué diseño es mejor?",
+    "options": [
+      "VCN privada + VPN/FastConnect + Service Gateway según servicios",
+      "IP pública para cada servidor",
+      "Internet Gateway para acceso administrativo general",
+      "Hacer público Object Storage"
+    ],
+    "correct": 0,
+    "why": [
+      "Combina acceso corporativo privado con conectividad privada a servicios Oracle compatibles.",
+      "Contradice aislamiento.",
+      "Exposición innecesaria.",
+      "Contradice requisito de privacidad."
+    ]
+  },
+  {
+    "domain": "Architecture",
+    "scenario": "El equipo propone una solución barata, pero sin redundancia, para una aplicación con RTO de minutos. ¿Cuál es la objeción principal?",
+    "options": [
+      "El costo siempre es más importante",
+      "No cumple el objetivo de recuperación; requiere arquitectura y pruebas acordes al RTO",
+      "Con un NAT Gateway se resuelve",
+      "Aumentar memoria garantiza continuidad"
+    ],
+    "correct": 1,
+    "why": [
+      "Ignora un requisito crítico.",
+      "Un RTO bajo exige mecanismos de disponibilidad/failover y validación práctica.",
+      "NAT no crea redundancia.",
+      "Memoria no elimina puntos únicos de falla."
+    ]
+  },
+  {
+    "domain": "Architecture",
+    "scenario": "Una empresa quiere restringir privilegios, cifrar secretos, detectar configuraciones inseguras y mantener auditoría. ¿Qué combinación cubre mejor el objetivo?",
+    "options": [
+      "IAM mínimo privilegio + Vault + Cloud Guard + Audit",
+      "Solo Load Balancer",
+      "Solo FastConnect",
+      "Solo Autoscaling"
+    ],
+    "correct": 0,
+    "why": [
+      "Las cuatro capacidades cubren autorización, secretos, postura de seguridad y trazabilidad.",
+      "Balanceador no cubre seguridad integral.",
+      "Conectividad privada no sustituye controles.",
+      "Escalado no resuelve permisos ni auditoría."
+    ]
+  },
+  {
+    "domain": "Architecture",
+    "scenario": "El tráfico de una aplicación varía por horas del día de forma muy predecible. ¿Qué alternativa puede anticipar capacidad sin esperar una métrica reactiva?",
+    "options": [
+      "Scheduled Autoscaling",
+      "Backups de Block Volume",
+      "Cloud Guard",
+      "Security Lists"
+    ],
+    "correct": 0,
+    "why": [
+      "Scheduled Autoscaling programa ajustes en ventanas conocidas.",
+      "Backups no ajustan capacidad.",
+      "Cloud Guard es seguridad.",
+      "Security Lists son reglas de tráfico."
+    ]
+  },
+  {
+    "domain": "Architecture",
+    "scenario": "Una empresa quiere garantizar que una aplicación no dependa de una sola instancia y que los clientes solo reciban tráfico de nodos sanos. ¿Qué capacidad es clave?",
+    "options": [
+      "Load Balancer con health checks y backends redundantes",
+      "Un NAT Gateway",
+      "Una API key de administrador",
+      "Object Storage Archive"
+    ],
+    "correct": 0,
+    "why": [
+      "Health checks permiten retirar backends no saludables; se requieren instancias redundantes.",
+      "NAT no comprueba backends.",
+      "API key no mejora disponibilidad.",
+      "Archive no distribuye solicitudes."
+    ]
+  }
+]
