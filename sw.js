@@ -1,4 +1,4 @@
-const CACHE='oci-sim-v2-150';
+const CACHE='oci-sim-v2-150-en-options';
 const ASSETS=['./','./index.html','./styles.css','./app.js','./logic.mjs','./questions.json','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('oci-sim-')&&key!==CACHE).map(key=>caches.delete(key)))),self.clients.claim()])));

@@ -1,6 +1,6 @@
 # OCI Architect Associate — Simulador de escenarios, versión 2
 
-Simulador estático en español con **150 casos empresariales**, 30 de selección múltiple, modo práctica, modo examen, revisión de errores y progreso local. Las respuestas se muestran al enviar en práctica; en examen solo al terminar. Cada alternativa tiene su razonamiento, y cada caso incluye conceptos, diferencias, pistas, consejos y un enlace a documentación oficial de Oracle.
+Simulador estático con **150 casos empresariales**, 30 de selección múltiple, modo práctica, modo examen, revisión de errores y progreso local. Las cuatro opciones de cada caso y los nombres de servicios y funciones OCI se presentan en **inglés**, como en el examen; los escenarios, razonamientos y consejos están redactados en español. Las respuestas se muestran al enviar en práctica; en examen solo al terminar. Cada alternativa tiene su razonamiento, y cada caso incluye conceptos, diferencias, pistas, consejos y un enlace a documentación oficial de Oracle.
 
 ## Actualizar GitHub Pages
 

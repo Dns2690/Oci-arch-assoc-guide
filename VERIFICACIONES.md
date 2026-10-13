@@ -6,7 +6,7 @@ Los escenarios se redactaron como decisiones de arquitectura y se contrastaron c
 
 - **Disponibilidad por región, availability domain y shape:** comprueba la región concreta, los límites de servicio y la capacidad real. Una capacity reservation es específica de AD/shape compatible y puede generar cargos por capacidad ociosa.
 - **Precios y clases de almacenamiento:** revisa tarifas vigentes, periodos mínimos y cargos de recuperación de Infrequent Access y Archive. No se citan importes en las preguntas porque cambian.
-- **Auto-Tiering:** verifica elegibilidad de objetos, permisos y posible incompatibilidad con reglas lifecycle de transición a Infrequent Access.
+- **Auto-Tiering:** verifica elegibilidad de objetos, permisos y posible incompatibilidad con Lifecycle Policies de transición a Infrequent Access.
 - **Migración:** confirma matriz de fuentes/destinos, versiones, licencias, requisitos de red y ventanas de corte para Oracle Cloud Migrations y Database Migration.
 - **RPO/RTO y réplica:** son objetivos del negocio, no garantías automáticas del servicio. Hay que medir desfase, failover y recuperación de la pila completa.
 - **Seguridad:** verifica las operaciones IAM exactas, el alcance del compartimento, certificados, rutas y reglas de red antes de desplegar.

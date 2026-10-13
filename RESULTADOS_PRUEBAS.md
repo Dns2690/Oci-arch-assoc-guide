@@ -7,6 +7,7 @@ Fecha: 12 de octubre de 2026 (Costa Rica).
 | Banco: 150 identificadores y escenarios únicos | Aprobado |
 | 30 casos de selección múltiple; 14 áreas; cuatro opciones y cuatro justificaciones por caso | Aprobado |
 | Campos de conceptos, diferencias, pistas, consejos y puntos por verificar | Aprobado |
+| 600 opciones de respuesta en inglés; términos mezclados en la prosa revisados | Aprobado (prueba automática y revisión editorial) |
 | Puntuación exacta de selecciones múltiples y registro de errores | Aprobado (pruebas `node --test`) |
 | Práctica: explicación solo después de enviar | Aprobado en Chrome |
 | Navegación, guardado, recarga, reanudación y repetición de falladas | Aprobado en Chrome |
